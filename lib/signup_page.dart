@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ap4/widgets/custom_textfield.dart';
 import 'login_page.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignupPage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();

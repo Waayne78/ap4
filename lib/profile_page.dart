@@ -1,93 +1,51 @@
 import 'package:flutter/material.dart';
-import 'login_page.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blueAccent, Colors.purpleAccent],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Column(
-          children: [
-            SizedBox(height: 50),
-            // Photo de profil
-            CircleAvatar(
-              radius: 60,
-              backgroundImage: AssetImage('assets/profile_picture.jpg'), // Ajoutez une image dans le dossier assets
-            ),
-            SizedBox(height: 20),
-            // Nom de l'utilisateur
-            Text(
-              'John Doe',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
+    return Container(
+      color: Color(0xFFF8FAFF),
+      child: Column(
+        children: [
+          // En-tête
+          PreferredSize(
+            preferredSize: Size.fromHeight(70.0),
+            child: Container(
+              decoration: BoxDecoration(
                 color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 10),
-            // Email de l'utilisateur
-            Text(
-              'john.doe@example.com',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white70,
-              ),
-            ),
-            SizedBox(height: 30),
-            // Cartes pour les informations
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 20,
+                    offset: Offset(0, 5),
                   ),
-                ),
+                ],
+              ),
+              child: SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
                     children: [
-                      // Carte pour les informations personnelles
-                      _buildInfoCard(
-                        icon: Icons.person,
-                        title: 'Informations personnelles',
-                        content: 'Nom: John Doe\nEmail: john.doe@example.com',
-                      ),
-                      SizedBox(height: 20),
-                      // Carte pour les commandes
-                      _buildInfoCard(
-                        icon: Icons.shopping_cart,
-                        title: 'Commandes récentes',
-                        content: '2 commandes en cours\n5 commandes livrées',
-                      ),
-                      SizedBox(height: 20),
-                      // Bouton de déconnexion
-                      ElevatedButton(
-                        onPressed: () {
-                          // Simuler une déconnexion
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => LoginPage()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.redAccent,
-                          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF4F6AF6).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Text(
-                          'Se déconnecter',
-                          style: TextStyle(fontSize: 16),
+                        child: Icon(
+                          Icons.person,
+                          color: Color(0xFF4F6AF6),
+                          size: 20,
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        'Mon Profil',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF2D3142),
                         ),
                       ),
                     ],
@@ -95,47 +53,201 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+          // Contenu
+          Expanded(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  // Photo de profil
+                  Container(
+                    padding: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF4F6AF6), Color(0xFF6B7FF7)],
+                      ),
+                    ),
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.person,
+                        size: 50,
+                        color: Color(0xFF4F6AF6),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Informations personnelles
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.03),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        _buildProfileItem(
+                          icon: Icons.person_outline,
+                          title: 'Nom complet',
+                          value: 'Jean Dupont',
+                        ),
+                        _buildDivider(),
+                        _buildProfileItem(
+                          icon: Icons.email_outlined,
+                          title: 'Email',
+                          value: 'jean.dupont@email.com',
+                        ),
+                        _buildDivider(),
+                        _buildProfileItem(
+                          icon: Icons.phone_outlined,
+                          title: 'Téléphone',
+                          value: '+33 6 12 34 56 78',
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Paramètres
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.03),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        _buildSettingsItem(
+                          icon: Icons.settings_outlined,
+                          title: 'Paramètres',
+                          onTap: () {},
+                        ),
+                        _buildDivider(),
+                        _buildSettingsItem(
+                          icon: Icons.notifications_outlined,
+                          title: 'Notifications',
+                          onTap: () {},
+                        ),
+                        _buildDivider(),
+                        _buildSettingsItem(
+                          icon: Icons.help_outline,
+                          title: 'Aide',
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileItem({
+    required IconData icon,
+    required String title,
+    required String value,
+  }) {
+    return Padding(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Color(0xFF4F6AF6).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: Color(0xFF4F6AF6), size: 20),
+          ),
+          SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  color: Color(0xFF2D3142).withOpacity(0.7),
+                  fontSize: 12,
+                ),
+              ),
+              SizedBox(height: 4),
+              Text(
+                value,
+                style: TextStyle(
+                  color: Color(0xFF2D3142),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSettingsItem({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Color(0xFF4F6AF6).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, color: Color(0xFF4F6AF6), size: 20),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: Color(0xFF2D3142),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.chevron_right,
+              color: Color(0xFF2D3142).withOpacity(0.5),
+            ),
           ],
         ),
       ),
     );
   }
 
-  // Widget pour créer une carte d'information
-  Widget _buildInfoCard({required IconData icon, required String title, required String content}) {
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            Icon(icon, size: 40, color: Colors.blueAccent),
-            SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    content,
-                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+  Widget _buildDivider() {
+    return Container(
+      height: 1,
+      color: Color(0xFF2D3142).withOpacity(0.05),
     );
   }
 }
