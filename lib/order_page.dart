@@ -4,7 +4,7 @@ import 'package:ap4/models/medicament.dart'; // Assurez-vous d'avoir ce modèle
 class OrderPage extends StatelessWidget {
   final List<Medicament> panier;
 
-  OrderPage({required this.panier});
+  const OrderPage({super.key, required this.panier});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +24,11 @@ class OrderPage extends StatelessWidget {
                 final medicament = panier[index];
                 return ListTile(
                   title: Text(medicament.nom),
-                  subtitle: Text('${medicament.prix} €'),
+                  subtitle: Text('${medicament.prix.toString()} €'), // Convertir en chaîne
                   trailing: IconButton(
                     icon: Icon(Icons.remove_circle_outline, color: Colors.red),
                     onPressed: () {
-                      // Retirer du panier (nécessite un StatefulWidget pour mettre à jour l'état)
+                      // Retirer du panier
                     },
                   ),
                 );

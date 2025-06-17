@@ -4,7 +4,7 @@ import '../order_details_page.dart';
 class RecentOrderItem extends StatelessWidget {
   final Map<String, dynamic> order;
 
-  const RecentOrderItem({Key? key, required this.order}) : super(key: key);
+  const RecentOrderItem({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {

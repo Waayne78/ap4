@@ -7,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
 
   const CustomTextField({
+    super.key,
     required this.label,
     required this.icon,
     this.isPassword = false,
@@ -20,7 +21,8 @@ class CustomTextField extends StatelessWidget {
       obscureText: isPassword,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: Colors.blueAccent), // Utilisation de prefixIcon
+        prefixIcon:
+            Icon(icon, color: Colors.blueAccent), // Utilisation de prefixIcon
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(

@@ -37,3 +37,23 @@ exports.getCommandeById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+exports.getUserOrders = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    const [orders] = await db.query(
+      "SELECT * FROM commandes WHERE pharmacien_id = ? OR praticien_id = ?",
+      [userId, userId]
+    );
+    
+    // Vous pouvez optionnellement ajouter une vérification si aucune commande n'est trouvée
+    if (orders.length === 0) {
+      return res.status(200).json([]); // Renvoyer un tableau vide plutôt qu'une erreur 404
+    }
+    
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des commandes:", error);
+    res.status(500).json({ message: error.message });
+  }
+};

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ap4/login_page.dart';
 import 'package:ap4/home_page.dart';
-import 'package:ap4/signup_page.dart';
 import 'package:ap4/catalogue_page.dart';
 import 'package:ap4/order_page.dart';
 import 'package:ap4/profile_page.dart';
@@ -11,6 +10,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,11 +29,18 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => LoginPage(),
-        '/home': (context) => HomePage(),
-        '/signup': (context) => SignupPage(),
+        '/home': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments
+              as Map<String, dynamic>;
+          return HomePage(userId: args['userId']); // Passez le userId ici
+        },
         '/catalogue': (context) => CataloguePage(),
         '/order': (context) => OrderPage(panier: []),
-        '/profile': (context) => ProfilePage(),
+        '/profile': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments
+              as Map<String, dynamic>;
+          return ProfilePage(userId: args['userId']); // Passez le userId ici
+        },
       },
     );
   }

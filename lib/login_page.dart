@@ -1,9 +1,7 @@
-import 'package:ap4/main_navigation_page.dart';
+import 'package:ap4/home_page.dart';
 import 'package:flutter/material.dart';
-// import 'package:ap4/widgets/custom_textfield.dart';
-import 'package:ap4/widgets/custom_textfield.dart';
-import 'signup_page.dart';
-import 'profile_page.dart';
+import 'package:ap4/main_navigation_page.dart';
+import 'package:ap4/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,7 +12,41 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final AuthService _authService = AuthService(); // Instance d'AuthService
   bool _obscurePassword = true;
+  bool _isLoading = false;
+
+  void _handleLogin() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        final result = await _authService.login(
+          _emailController.text,
+          _passwordController.text,
+        );
+
+        // Si la connexion réussit, naviguer vers la page principale
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainNavigationPage(userId: result['user']['id'].toString()), // Passez le userId ici
+          ),
+        );
+      } catch (e) {
+        // Afficher un message d'erreur
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur : ${e.toString()}')),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +79,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          
           SafeArea(
             child: SingleChildScrollView(
               child: Padding(
@@ -56,7 +87,6 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 60),
-                    
                     // Logo et titre
                     Center(
                       child: Container(
@@ -74,7 +104,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(height: 32),
-                    
                     // En-tête
                     Text(
                       'Bienvenue',
@@ -94,7 +123,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(height: 40),
-
                     // Formulaire
                     Form(
                       key: _formKey,
@@ -135,42 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                               },
                             ),
                           ),
-                          SizedBox(height: 16),
-
-                          // Options de connexion
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    value: true,
-                                    onChanged: (value) {},
-                                    activeColor: Color(0xFF4F6AF6),
-                                  ),
-                                  Text(
-                                    'Se souvenir de moi',
-                                    style: TextStyle(
-                                      color: Color(0xFF2D3142),
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  'Mot de passe oublié ?',
-                                  style: TextStyle(
-                                    color: Color(0xFF4F6AF6),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                           SizedBox(height: 32),
-
                           // Bouton de connexion
                           Container(
                             width: double.infinity,
@@ -191,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                             child: ElevatedButton(
-                              onPressed: _handleLogin,
+                              onPressed: _isLoading ? null : _handleLogin,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 shadowColor: Colors.transparent,
@@ -199,23 +192,21 @@ class _LoginPageState extends State<LoginPage> {
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                               ),
-                              child: Text(
-                                'Se connecter',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
-                              ),
+                              child: _isLoading
+                                  ? CircularProgressIndicator(color: Colors.white)
+                                  : Text(
+                                      'Se connecter',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 40),
-
-                    // Inscription
-                    _buildSignUpText(),
                   ],
                 ),
               ),
@@ -263,63 +254,6 @@ class _LoginPageState extends State<LoginPage> {
           filled: true,
           fillColor: Colors.white,
           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSocialButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onPressed,
-  }) {
-    return OutlinedButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon, size: 24),
-      label: Text(label),
-      style: OutlinedButton.styleFrom(
-        foregroundColor: Color(0xFF2D3142),
-        side: BorderSide(color: Colors.grey.withOpacity(0.3)),
-        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-    );
-  }
-
-  void _handleLogin() {
-    if (_formKey.currentState!.validate()) {
-      // Simuler une connexion réussie
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MainNavigationPage()),
-      );
-    }
-  }
-
-  Widget _buildSignUpText() {
-    return Center(
-      child: GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, '/signup');
-        },
-        child: RichText(
-          text: TextSpan(
-            text: 'Vous n\'avez pas de compte ? ',
-            style: TextStyle(
-              color: Color(0xFF2D3142).withOpacity(0.7),
-            ),
-            children: [
-              TextSpan(
-                text: 'S\'inscrire',
-                style: TextStyle(
-                  color: Color(0xFF4F6AF6),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
